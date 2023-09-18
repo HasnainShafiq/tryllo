@@ -13,24 +13,29 @@ router.get('/api/board', async (req, res, next) => {
 
 });
 
+// add a new post to the db
 router.post('/api/board/tasklists/:id', async (req, res, next) => {
+  // grab id of tasklist which you want to add the task to
   const {id} = req.params;
   const task = req.body;
 
   console.log(task);
-  const {title, desc} = task;
+  // destructure the task property values from the request body
+  const {title, desc, order} = task;
 
-  console.log('task:', title)
-  console.log('description', desc)
+  console.log(task);
 
+  // create a new Task with the destructured values
   const newTask = new Task({
     title: title,
-    description: desc
+    description: desc,
+    order: order
   })
 
   await newTask.save()
   console.log(newTask);
 
+  // find the same Tasklist the POST request was made from
   const taskList = await TaskList.findById(id);
 
   await taskList.tasks.push(newTask);
@@ -39,6 +44,35 @@ router.post('/api/board/tasklists/:id', async (req, res, next) => {
 
   console.log('it worked')
   console.log('sent from:', id)
+})
+
+
+// edit an existing Task
+router.put('/api/board/tasklists/:task_id', async (req, res, next) => {
+  
+  const taskId = req.params.task_id;
+
+  const task = req.body;
+
+  const {title, desc, order} = task;
+
+  const editTask = await Task.findByIdAndUpdate(taskId, { title: title, description: desc, order: order }, { new: true });
+
+  await editTask.save();
+
+  console.log('task id:', taskId);
+
+})
+
+// delete a Task
+
+router.delete('/api/board/tasklists/:task_id', async (req, res, next) => {
+
+  const id = req.params.task_id
+
+  await Task.findByIdAndDelete(id);
+
+  console.log('DELETED')
 })
 
 

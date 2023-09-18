@@ -1,10 +1,29 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export const TaskForm = ({ taskListId }) => {
-  const [task, setTask] = useState({
-    title: " ",
-    desc: " ",
+// taskListId is used for the req params.
+export const TaskForm = ({ taskListId, type }) => {
+  
+    const [order, setOrder] = useState(null);
+    const [task, setTask] = useState({
+    title: "",
+    desc: "",
   });
+
+  useEffect(() => {
+  
+    const orderFunc = () => {
+        if(type === 'To-do') {
+            setOrder(1)
+        } else if(type === 'In-Progress') {
+            setOrder(2)
+        } else if(type === 'Completed') {
+            setOrder(3)
+        }
+    }
+
+  orderFunc();
+
+}, [])
 
 
 
@@ -12,9 +31,11 @@ export const TaskForm = ({ taskListId }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
+    // spread prevState object and update the keys which match [name] with the new value.
     setTask((prevState) => ({
       ...prevState,
       [name]: value,
+      order: order
     }));
 
     console.log(task);
@@ -38,9 +59,10 @@ export const TaskForm = ({ taskListId }) => {
     const response = await res.json()
 
     setTask({
-        title: " ",
-        desc: " ",
+        title: "",
+        desc: "",
     })
+
     
     console.log('fetch data: ', response);
   };
