@@ -1,33 +1,30 @@
-// TaskList receives prop data from App.jsx   
-
 import { Task } from "./Task";
+import { PlusIcon } from "../icons/PlusIcon";
 
+// TaskList receives prop data from App.jsx   
 export const TaskList = ({ type, tasks, _id, toggleModal, editModalToggle }) => {
 
 
-    // take id of taskList and forward it to App.jsx
-    const modalToggle = (e) => {
+
+    const modalToggle = () => {
         
-        const id = (e.target.id)
+        const id = (_id)
         
         toggleModal(id, type);
     }
 
-    // takes taskId from Task.jsx and passes it to App.jsx
+
     const sendData = (id, title, description) => {
         editModalToggle(id, type, title, description)
     }
 
 
   return (
-    <div  className="flex flex-col mx-auto items-center justify-center space-y-2" >
-      <ul className="space-y-2">
-      <h1 className="flex relative self-start justify-between font-bold text-slate-200"><span className="">{type}</span>
-      <button className="font-bold text-slate-200" id={_id} onClick={modalToggle}>add</button>
+    <div  className="flex flex-col min-w-[250px] max-w-xs sm:max-w-sm mx-auto items-center space-y-2 max-h-screen overflow-y-scroll scrollbar-thin" >
+      <ul className="space-y-2 w-full">
+      <h1 className="flex relative self-start justify-between font-bold font-roboto md:text-lg text-slate-200"><span className="">{type}</span>
+      <PlusIcon className="hover:cursor-pointer hover:bg-neutral-700 rounded-xl transition-all" id={_id} toggleModalListener={modalToggle}></PlusIcon>
       </h1>
-        {/* loop over 'tasks' field and create a task card.
-        Need to create a 'Task' component.
-        */}
         {tasks.map((task, index) => {
           return (
             <Task logTaskData={sendData} title={task.title} description={task.description} order={task.order} _id={task._id} key={index} />

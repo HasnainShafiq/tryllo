@@ -19,13 +19,10 @@ router.post('/api/board/tasklists/:id', async (req, res, next) => {
   const {id} = req.params;
   const task = req.body;
 
-  console.log(task);
-  // destructure the task property values from the request body
+
   const {title, desc, order} = task;
 
-  console.log(task);
 
-  // create a new Task with the destructured values
   const newTask = new Task({
     title: title,
     description: desc,
@@ -35,15 +32,11 @@ router.post('/api/board/tasklists/:id', async (req, res, next) => {
   await newTask.save()
   console.log(newTask);
 
-  // find the same Tasklist the POST request was made from
   const taskList = await TaskList.findById(id);
 
   await taskList.tasks.push(newTask);
   await taskList.save();
-  res.redirect('http://localhost:5173/')
-
-  console.log('it worked')
-  console.log('sent from:', id)
+  
 })
 
 

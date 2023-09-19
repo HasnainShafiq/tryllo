@@ -1,19 +1,24 @@
 const express = require('express');
 const path = require('path');
 const cors = require("cors");
-
 const mongoose = require("mongoose");
 
 mongoose.set("strictQuery", false);
 
-const mongoDB = "mongodb+srv://Hasnain:KedZek7SLRSfMWKg@cluster0.qgxm3ff.mongodb.net/tryllo?retryWrites=true&w=majority";
 
 main().catch((err) => console.log(err));
 
 async function main() {
-  await mongoose.connect(mongoDB);
+  try {
+    await mongoose.connect('mongodb+srv://Hasnain:oF6rNuen7gXxXsI4@cluster0.qgxm3ff.mongodb.net/tryllo?retryWrites=true&w=majority');
 
+    console.log("CONNECTED")
+  }
+  catch(e) {
+    console.log(e)
+  }
 }
+
 
 const indexRouter = require('./routes/index');
 
